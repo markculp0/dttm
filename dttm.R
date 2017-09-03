@@ -1,6 +1,6 @@
 # =========================================
-# | dttm |
-# --------
+# ||  dttm  ||
+# ------------
 # An app to display time zone information.
 #
 # =========================================
@@ -33,10 +33,6 @@ shangTime
 delhiTime <- with_tz(now(),tzone = "Asia/Kolkata")
 delhiTime
 # [1] "2017-09-02 19:34:06 IST"
-
-
-
-
 
 
 
