@@ -11,6 +11,10 @@ myTZ <- ""          # Current local computer TZ
 timeVal <- ""       # For calculations, 1-24
 myClockTime <- ""   # For display times, 1 - 12
 
+# Data frame for U.S. times
+df <- data.frame()
+
+
 # Define UI for application
 ui <- fluidPage(
    
@@ -40,6 +44,7 @@ ui <- fluidPage(
         textOutput("locHonoluTime"),
         textOutput("locLosAngTZ"),
         textOutput("locLosAngTime"),
+        tableOutput("table1"),
         plotOutput("distPlot")
       )
    )
@@ -98,25 +103,79 @@ server <- function(input, output) {
     paste(format(dttm,"%Y-%m-%d %H:%M"))
   })
   
+  # Get and display Denver dttm
+  denv_dttm <- reactive({
+    # Adjust time for single digit hours
+    if (input$sldTime > 9){
+      tm <- paste(input$sldTime, "00", sep = "")
+    } else {
+      tm <- paste("0", input$sldTime, "00", sep = "")
+    }
+    dttm <- paste(input$meetDate, tm, sep = " ")
+    dttm <- ymd_hm(dttm, tz = myTZ)
+    dttm <- with_tz(dttm, tz = "America/Denver")
+    paste(format(dttm,"%Y-%m-%d %H:%M"))
+  })
+  
+  # Get and display Chicago dttm
+  chicago_dttm <- reactive({
+    # Adjust time for single digit hours
+    if (input$sldTime > 9){
+      tm <- paste(input$sldTime, "00", sep = "")
+    } else {
+      tm <- paste("0", input$sldTime, "00", sep = "")
+    }
+    dttm <- paste(input$meetDate, tm, sep = " ")
+    dttm <- ymd_hm(dttm, tz = myTZ)
+    dttm <- with_tz(dttm, tz = "America/Chicago")
+    paste(format(dttm,"%Y-%m-%d %H:%M"))
+  })
+  
+  # Get and display New York dttm
+  newYork_dttm <- reactive({
+    # Adjust time for single digit hours
+    if (input$sldTime > 9){
+      tm <- paste(input$sldTime, "00", sep = "")
+    } else {
+      tm <- paste("0", input$sldTime, "00", sep = "")
+    }
+    dttm <- paste(input$meetDate, tm, sep = " ")
+    dttm <- ymd_hm(dttm, tz = myTZ)
+    dttm <- with_tz(dttm, tz = "America/New_York")
+    paste(format(dttm,"%Y-%m-%d %H:%M"))
+  })
+  
   # Output to my local time (Side Panel)
   output$myTime = renderText({
     my_tm()
   })  
   
   # Output Honolulu local time zone (Main Panel)
-  output$locHonoluTZ <- renderText("Pacific/Honolulu")
+  # output$locHonoluTZ <- renderText("Pacific/Honolulu")
     
   # Output to Honolulu local time (Main Panel)
-  output$locHonoluTime = renderText({
-    honolu_dttm()
-  })
+  # output$locHonoluTime = renderText({
+  #   honolu_dttm()
+  # })
   
   # Output Los Angeles local time zone (Main Panel)
-  output$locLosAngTZ <- renderText("America/Los_Angeles")
+  # output$locLosAngTZ <- renderText("America/Los_Angeles")
   
   # Output to Los Angeles local time (Main Panel)
-  output$locLosAngTime = renderText({
-    losAng_dttm()
+  #output$locLosAngTime = renderText({
+  #  losAng_dttm()
+  #})
+  
+  output$table1 <- renderTable({
+    df[1,1] <- honolu_dttm()
+    df[1,2] <- losAng_dttm()
+    df[1,3] <- denv_dttm()
+    df[1,4] <- chicago_dttm()
+    df[1,5] <- newYork_dttm()
+    names(df) <- c("Pacific/Honolulu","America/LosAng",
+                   "America/Denver","America/Chicago",
+                   "America/NewYrk")
+    df
   })
   
   # Plot, maybe?
