@@ -1,6 +1,9 @@
 #
+# ========
+# server.R
+# ========
 # This is the DateTime Shiny web application. 
-#
+# 
 #    http://shiny.rstudio.com/
 #
 
@@ -14,43 +17,9 @@ myClockTime <- ""   # For display times, 1 - 12
 # Data frame for U.S. times
 df <- data.frame()
 
-# Define UI for application
-ui <- fluidPage(
+# Define server logic required to draw a histogram
+shinyServer(function(input, output) {
    
-   # Application title
-   titlePanel("DateTime"),
-   
-   # Sidebar with a slider input for number of hours 
-   sidebarLayout(
-      sidebarPanel(
-        
-        # Side Bar GUI
-        textOutput("myTzOut"),
-        dateInput("meetDate", "Meeting Date: ", width = "100px"),
-        p(strong('Meeting Time: ')),
-        textOutput("myTime"),
-        br(""),
-        sliderInput("sldTime",
-                     "Hour slider:",
-                     min = 1,
-                     max = 24,
-                     value = 12)
-         ), # end sidebarPanel()
-      
-      # Main Panel GUI
-      mainPanel(
-        textOutput("locHonoluTZ"),
-        textOutput("locHonoluTime"),
-        textOutput("locLosAngTZ"),
-        textOutput("locLosAngTime"),
-        tableOutput("table1"),
-        plotOutput("distPlot")
-      )  # end mainPanel
-   )  # sidebarLayout
-) # end ui fluidPage()
-
-# Server logic 
-server <- function(input, output) {
   
   # Get my TZ
   myTZ <- Sys.timezone()
@@ -149,22 +118,6 @@ server <- function(input, output) {
     my_tm()
   })  
   
-  # Output Honolulu local time zone (Main Panel)
-  # output$locHonoluTZ <- renderText("Pacific/Honolulu")
-    
-  # Output to Honolulu local time (Main Panel)
-  # output$locHonoluTime = renderText({
-  #   honolu_dttm()
-  # })
-  
-  # Output Los Angeles local time zone (Main Panel)
-  # output$locLosAngTZ <- renderText("America/Los_Angeles")
-  
-  # Output to Los Angeles local time (Main Panel)
-  #output$locLosAngTime = renderText({
-  #  losAng_dttm()
-  #})
-  
   output$table1 <- renderTable({
     df[1,1] <- honolu_dttm()
     df[1,2] <- losAng_dttm()
@@ -177,11 +130,4 @@ server <- function(input, output) {
     df
   })
   
-  # Plot, maybe?
-  output$distPlot <- renderPlot({
-  })
-}
-
-# Run the application 
-shinyApp(ui = ui, server = server)
-
+})  # shinyServer/function
