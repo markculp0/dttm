@@ -38,6 +38,7 @@ shinyUI(fluidPage(
       textOutput("locLosAngTZ"),
       textOutput("locLosAngTime"),
       tableOutput("table1"),
+      tableOutput("table2"),
       plotOutput("distPlot")
     )  # end mainPanel
   )  # sidebarLayout
