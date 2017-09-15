@@ -2,8 +2,9 @@
 # ========
 # server.R
 # ========
-# This is the DateTime Shiny web application. 
-# 
+# This is the DateTime Shiny web application based on
+# Garrett Grolemund's lubridate package.
+#
 #    http://shiny.rstudio.com/
 #
 
@@ -23,7 +24,6 @@ df2 <- data.frame()
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
    
-  
   # Get my TZ
   myTZ <- Sys.timezone()
   
@@ -45,90 +45,64 @@ shinyServer(function(input, output) {
     }
   })
   
-  # Get and display Honolulu dttm
-  honolu_dttm <- reactive({
+  getSlideTime <- reactive({
     # Adjust time for single digit hours
     if (input$sldTime > 9){
       tm <- paste(input$sldTime, "00", sep = "")
     } else {
       tm <- paste("0", input$sldTime, "00", sep = "")
     }
+  })
+  
+  # Get and display Honolulu dttm
+  honolu_dttm <- reactive({
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
-    dttm <- ymd_hm(dttm, tz = myTZ)
-    dttm <- with_tz(dttm, tz = "Pacific/Honolulu")
-    # paste(format(dttm,"%Y-%m-%d %H:%M"))
+    dttm <- ymd_hm(dttm, tz = myTZ) 
+    dttm <- with_tz(dttm, tz = "Pacific/Honolulu") 
     paste(format(dttm,"%Y-%m-%d %I:%M %p"))
   })
   
   # Get and display Los Angeles dttm
   losAng_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "America/Los_Angeles")
-    #paste(format(dttm,"%Y-%m-%d %H:%M"))
     paste(format(dttm,"%Y-%m-%d %I:%M %p"))
   })
   
   # Get and display Denver dttm
   denv_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "America/Denver")
-    #paste(format(dttm,"%Y-%m-%d %H:%M"))
     paste(format(dttm,"%Y-%m-%d %I:%M %p"))
   })
   
   # Get and display Chicago dttm
   chicago_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "America/Chicago")
-    #paste(format(dttm,"%Y-%m-%d %H:%M"))
     paste(format(dttm,"%Y-%m-%d %I:%M %p"))
   })
   
   # Get and display New York dttm
   newYork_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "America/New_York")
-    #paste(format(dttm,"%Y-%m-%d %H:%M"))
     paste(format(dttm,"%Y-%m-%d %I:%M %p"))
   })
 
   
   # Get and display London dttm
   mex_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "America/Mexico_City")
@@ -137,12 +111,7 @@ shinyServer(function(input, output) {
   
   # Get and display London dttm
   saoPaulo_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "America/Sao_Paulo")
@@ -151,12 +120,7 @@ shinyServer(function(input, output) {
   
   # Get and display London dttm
   london_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "Europe/London")
@@ -165,12 +129,7 @@ shinyServer(function(input, output) {
     
   # Get and display India dttm
   india_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "Asia/Kolkata")
@@ -179,12 +138,7 @@ shinyServer(function(input, output) {
   
   # Get and display China dttm
   shang_dttm <- reactive({
-    # Adjust time for single digit hours
-    if (input$sldTime > 9){
-      tm <- paste(input$sldTime, "00", sep = "")
-    } else {
-      tm <- paste("0", input$sldTime, "00", sep = "")
-    }
+    tm <- getSlideTime()
     dttm <- paste(input$meetDate, tm, sep = " ")
     dttm <- ymd_hm(dttm, tz = myTZ)
     dttm <- with_tz(dttm, tz = "Asia/Shanghai")

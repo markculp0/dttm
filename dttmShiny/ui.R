@@ -2,7 +2,8 @@
 # ======
 #  ui.R
 # ======
-# This is the DateTime Shiny web application. 
+# This is the DateTime Shiny web application based on
+# Garrett Grolemund's lubridate package.
 # 
 #    http://shiny.rstudio.com/
 #
@@ -22,7 +23,7 @@ shinyUI(fluidPage(
       textOutput("myTzOut"),
       dateInput("meetDate", "Meeting Date: ", width = "100px"),
       p(strong('Meeting Time: ')),
-      textOutput("myTime"),
+      h3(textOutput("myTime")),
       br(""),
       sliderInput("sldTime",
                   "Hour slider:",
@@ -37,7 +38,9 @@ shinyUI(fluidPage(
       textOutput("locHonoluTime"),
       textOutput("locLosAngTZ"),
       textOutput("locLosAngTime"),
+      h3("US Date-Times"),
       tableOutput("table1"),
+      h3("Non-US Date-Times"),
       tableOutput("table2"),
       plotOutput("distPlot")
     )  # end mainPanel
